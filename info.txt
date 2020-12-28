@@ -1,0 +1,80 @@
+#--------------------------------------------------
+INSTALL FLASK
+#--------------------------------------------------
+pip install flask
+Collecting flask
+  Using cached Flask-1.1.2-py2.py3-none-any.whl (94 kB)
+Collecting click>=5.1
+  Using cached click-7.1.2-py2.py3-none-any.whl (82 kB)
+Collecting itsdangerous>=0.24
+  Using cached itsdangerous-1.1.0-py2.py3-none-any.whl (16 kB)
+Collecting Jinja2>=2.10.1
+  Using cached Jinja2-2.11.2-py2.py3-none-any.whl (125 kB)
+Collecting MarkupSafe>=0.23
+  Using cached MarkupSafe-1.1.1-cp37-cp37m-win32.whl (15 kB)
+Collecting Werkzeug>=0.15
+  Using cached Werkzeug-1.0.1-py2.py3-none-any.whl (298 kB)
+Installing collected packages: MarkupSafe, Werkzeug, Jinja2, itsdangerous, click, flask
+Successfully installed Jinja2-2.11.2 MarkupSafe-1.1.1 Werkzeug-1.0.1 click-7.1.2 flask-1.1.2 itsdangerous-1.1.0
+
+
+Jinja2 => Template
+Werkzeug +> handles http requests
+
+#--------------------------------------------------
+SETTING ENVIRONMENT
+#--------------------------------------------------
+SET FLASK_APP=flashcards.py
+SET FLASK_ENV=development
+flask run
+
+>>> import flashcards
+>>> flashcards.app.url_map
+Map([<Rule '/views' (GET, HEAD, OPTIONS) -> check_counter>,
+ <Rule '/' (GET, HEAD, OPTIONS) -> welcome>,
+ <Rule '/static/<filename>' (GET, HEAD, OPTIONS) -> static>])
+>>>
+
+default static function
+
+#--------------------------------------------------
+Model Template View
+#--------------------------------------------------
+Jinja templates
+ Create templates folder
+ from flask import Flask,render_template, abort, jsonify
+
+ url_for => {{ url_for('card_view',index=loop.index0) }}
+
+ if else in jinja
+    {% if index < max_index %}
+        <a href="{{ url_for('card_view',index=index+1) }}">Next Card</a>
+    {% else %}
+        <a href="{{ url_for('card_view',index=0) }}">First Card</a>
+    {% endif %}
+
+ for loop
+    {% for card in cards %}
+        <li><a href="{{ url_for('card_view',index=loop.index0) }}">{{card.question}}</a></li>
+    {% endfor %}
+
+XSS
+CSRF
+FLASK WTF
+
+#------Deploying Flask application----
+gunicorn
+reverse proxy nginx
+
+apt install gunicorn3
+gunicorn3 module:app
+gunicorn3 flaskcards:app
+gunicorn3 -D flaskcards:app  # background as daemon
+cd /etc/nginx/sites-available
+rm default
+
+gunicorn website:copy deployment:create file default:
+sudo nano default
+sudo nginx restart
+
+Heroku
